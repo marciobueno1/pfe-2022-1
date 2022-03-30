@@ -4,7 +4,7 @@ import "./App.css";
 import { Person } from "./components/Person";
 
 function App() {
-  const { isLoading, error, data, isFetching } = useQuery("repoData", () =>
+  const { isLoading, error, data, isFetching } = useQuery("people", () =>
     axios.get("https://swapi.dev/api/people/").then((res) => {
       console.log("data", res.data);
       return res.data;
