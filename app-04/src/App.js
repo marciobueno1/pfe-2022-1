@@ -1,27 +1,21 @@
-import { useQuery } from "react-query";
-import axios from "axios";
+import { Link, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Person } from "./components/Person";
+import { About } from "./pages/About";
+import { Home } from "./pages/Home";
 
 function App() {
-  const { isLoading, error, data, isFetching } = useQuery("people", () =>
-    axios.get("https://swapi.dev/api/people/").then((res) => {
-      console.log("data", res.data);
-      return res.data;
-    })
-  );
-
-  if (isLoading) return "Loading...";
-
-  if (error) return "An error has occurred: " + error.message;
-
   return (
     <div className="App">
-      <h1>React Query</h1>
-      <div>{isFetching ? "Updating..." : ""}</div>
-      {data.results.map((person) => (
-        <Person key={person.url} data={person} />
-      ))}
+      <nav>
+        <Link to="/">Home</Link> <Link to="/about">About</Link>
+      </nav>
+      <h1>Welcome to React Router!</h1>{" "}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />}>
+          <Route path=":aboutID" element={<About />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
