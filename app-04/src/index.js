@@ -6,8 +6,18 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+const secToMs = 1000;
+const minToSec = 60;
+const minToMs = minToSec * secToMs;
+
 // Create a client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * minToMs,
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
