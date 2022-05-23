@@ -1,14 +1,5 @@
 import axios from "axios";
-import { useQuery, useMutation } from "react-query";
-
-/*
-curl -X GET \
--H "X-Parse-Application-Id: CQWId7FktRXCLmxy9jrhttsAAEPRAPKIQVYff8Z0" \
--H "X-Parse-REST-API-Key: tzGsObG6ozWRuNdLmaQFSciyGM13ZmqUxv2OHTlx" \
--G \
---data-urlencode "where={ \"descricao\":\"A string\",\"concluida\":true }" \
-https://parseapi.back4app.com/classes/Tarefa
-*/
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 let instance = axios.create({
   headers: {
@@ -29,11 +20,27 @@ export function useTarefas() {
   });
 }
 
-export function useMutateTarefa() {
-  return useMutation((novaTarefa) => {
-    return instance.post(
-      "https://parseapi.back4app.com/classes/Tarefa",
-      novaTarefa
+export function useAddTarefa() {
+  const queryClient = useQueryClient();
+  return useMutation(
+    (novaTarefa) => {
+      return instance.post(
+        "https://parseapi.back4app.com/classes/Tarefa",
+        novaTarefa
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("tarefas");
+      },
+    }
+  );
+}
+
+export function useRemoveTarefa() {
+  return useMutation((objectID) => {
+    return instance.delete(
+      `https://parseapi.back4app.com/classes/Tarefa/${objectID}`
     );
   });
 }
